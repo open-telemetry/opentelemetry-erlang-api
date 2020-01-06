@@ -47,7 +47,7 @@
                              description => description(),
                              kind := metric_kind(),
                              type => input_type(),
-                             label_keys => [atom()],
+                             label_keys => [label_key()],
                              monotonic => boolean(),
                              absolute => boolean(),
                              unit => unit()}.
