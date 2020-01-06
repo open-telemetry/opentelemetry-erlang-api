@@ -21,11 +21,11 @@
          record/4,
          measurement/3]).
 
--spec record(opentelemetry:meter(), ot_meter:name(), number(), ot_meter:label_set()) -> ok.
+-spec record(opentelemetry:meter(), ot_meter:name(), number(), ot_meter:label_set()) -> boolean().
 record(Meter, Name, Number, LabelSet) ->
-    ot_meter:record(Meter, ot_meter:bind(Meter, Name, LabelSet), Number).
+    ot_meter:record(Meter, Name, Number, LabelSet).
 
--spec record(opentelemetry:meter(), ot_meter:bound_instrument(), number()) -> ok.
+-spec record(opentelemetry:meter(), ot_meter:bound_instrument(), number()) -> boolean().
 record(Meter, BoundInstrument, Number) ->
     ot_meter:record(Meter, BoundInstrument, Number).
 

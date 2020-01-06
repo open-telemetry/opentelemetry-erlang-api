@@ -17,14 +17,14 @@
 %%%-------------------------------------------------------------------------
 -module(ot_meter).
 
--callback new_instruments(opentelemetry:meter(), [instrument_opts()]) -> ok.
+-callback new_instruments(opentelemetry:meter(), [instrument_opts()]) -> boolean().
 
 -callback labels(opentelemetry:meter(), list() | map()) -> label_set().
 
--callback record(opentelemetry:meter(), bound_instrument(), number()) -> ok.
--callback record(opentelemetry:meter(), instrument(), number(), label_set()) -> ok.
+-callback record(opentelemetry:meter(), bound_instrument(), number()) -> boolean().
+-callback record(opentelemetry:meter(), name(), number(), label_set()) -> boolean().
 
--callback record_batch(opentelemetry:meter(), [{instrument(), number()}], label_set()) -> ok.
+-callback record_batch(opentelemetry:meter(), [{instrument(), number()}], label_set()) -> boolean().
 
 -callback bind(opentelemetry:meter(), instrument(), label_set()) -> bound_instrument().
 -callback release(opentelemetry:meter(), bound_instrument()) -> ok.
@@ -34,18 +34,18 @@
          release/2,
          record/3,
          record/4,
-         record_batch/2]).
+         record_batch/3]).
 
 -type name() :: unicode:unicode_binary().
 -type description() :: unicode:unicode_binary().
--type metric_kind() :: counter | gauge | measure.
+-type instrument_kind() :: counter | gauge | measure.
 -type unit() :: atom().
 -type instrument_mode() :: monotonic | non_monotonic | absolute | non_absolute.
 -type input_type() :: integer | float.
 
 -type instrument_opts() :: #{name := name(),
                              description => description(),
-                             kind := metric_kind(),
+                             kind := instrument_kind(),
                              type => input_type(),
                              label_keys => [label_key()],
                              monotonic => boolean(),
@@ -59,11 +59,11 @@
 -type label_value() :: unicode:unicode_binary().
 -type label_set() :: #{label_key() => label_value()}.
 
--type measurement() :: {bound_instrument() | instrument(), number()}.
+-type measurement() :: {bound_instrument() | name(), number()}.
 
 -export_type([name/0,
               description/0,
-              metric_kind/0,
+              instrument_kind/0,
               input_type/0,
               unit/0,
               instrument_mode/0,
@@ -74,22 +74,22 @@
 new_instruments(Meter={Module, _}, List) ->
     Module:new_instruments(Meter, List).
 
--spec bind(opentelemetry:meter(), instrument(), label_set()) -> bound_instrument().
-bind(Meter={Module, _}, Instrument, LabelSet) ->
-    Module:bind(Meter, Instrument, LabelSet).
+-spec bind(opentelemetry:meter(), name(), label_set()) -> bound_instrument().
+bind(Meter={Module, _}, Name, LabelSet) ->
+    Module:bind(Meter, Name, LabelSet).
 
 -spec release(opentelemetry:meter(), bound_instrument()) -> ok.
 release(Meter={Module, _}, BoundInstrument) ->
     Module:release(Meter, BoundInstrument).
 
--spec record(opentelemetry:meter(), instrument(), number(), label_set()) -> ok.
-record(Meter={Module, _}, Instrument, Number, LabelSet) ->
-    Module:record(Meter, Instrument, Number, LabelSet).
+-spec record(opentelemetry:meter(), name(), number(), label_set()) -> boolean().
+record(Meter={Module, _}, Name, Number, LabelSet) ->
+    Module:record(Meter, Name, Number, LabelSet).
 
--spec record(opentelemetry:meter(), bound_instrument(), number()) -> ok.
+-spec record(opentelemetry:meter(), bound_instrument(), number()) -> boolean().
 record(Meter={Module, _}, BoundInstrument, Number) ->
     Module:record(Meter, BoundInstrument, Number).
 
--spec record_batch(opentelemetry:meter(), [measurement()]) -> ok.
-record_batch(Meter={Module, _}, Measurements) ->
-    Module:record_batch(Meter, Measurements).
+-spec record_batch(opentelemetry:meter(), label_set(), [measurement()]) -> boolean().
+record_batch(Meter={Module, _}, LabelSet, Measurements) ->
+    Module:record_batch(Meter, LabelSet, Measurements).
