@@ -4,8 +4,8 @@ defmodule OpenTelemetry.MixProject do
   def project do
     [
       app: :open_telemetry,
-      version: "0.1.0",
-      elixir: "~> 1.9",
+      version: version(),
+      elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
       # We should never have dependencies
       deps: deps(),
@@ -19,6 +19,12 @@ defmodule OpenTelemetry.MixProject do
         # extras: ["README.md"]
       ]
     ]
+  end
+
+  defp version do
+    "VERSION"
+    |> File.read!()
+    |> String.trim()
   end
 
   # Run "mix help compile.app" to learn about applications.
