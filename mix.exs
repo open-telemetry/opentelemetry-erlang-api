@@ -11,13 +11,12 @@ defmodule OpenTelemetry.MixProject do
       deps: deps(),
       # Docs
       name: "OpenTelemetry API",
-      # source_url: "https://github.com/USER/PROJECT",
-      # homepage_url: "http://YOUR_PROJECT_HOMEPAGE",
       docs: [
         main: "OpenTelemetry"
         # logo: "path/to/logo.png",
         # extras: ["README.md"]
-      ]
+      ],
+      package: package()
     ]
   end
 
@@ -35,6 +34,14 @@ defmodule OpenTelemetry.MixProject do
   def deps() do
     [
       {:ex_doc, "~> 0.21", only: :dev, runtime: false}
+    ]
+  end
+
+  defp package() do
+    [
+      build_tools: ["rebar3", "mix"]
+      licenses: ["Apache-2.0"],
+      links: %{"GitHub" => "https://github.com/open-telemetry/opentelemetry-erlang-api"}
     ]
   end
 end
