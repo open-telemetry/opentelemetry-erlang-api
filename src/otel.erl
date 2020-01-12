@@ -20,6 +20,7 @@
 -export([start_span/1,
          start_span/2,
          with_span/2,
+         with_span/3,
          current_span_ctx/0,
          end_span/0]).
 
@@ -47,10 +48,20 @@ start_span(SpanName, Opts) ->
     Tracer = opentelemetry:get_tracer(),
     ot_tracer:start_span(Tracer, SpanName, Opts).
 
--spec with_span(opentelemetry:span_ctx(), opentelemetry:span_ctx() | fun()) -> ok.
-with_span(Span=#span_ctx{}, Fun) ->
+-spec with_span(opentelemetry:span_name(), fun(() -> Return)) -> Return when
+      Return :: any().
+with_span(SpanName, Fun) ->
+    with_span(SpanName, #{}, Fun).
+
+-spec with_span(opentelemetry:span_name(), ot_span:start_opts(), fun(() -> Return)) -> Return when
+      Return :: any().
+with_span(SpanName, Opts, Fun) ->
     Tracer = opentelemetry:get_tracer(),
-    ot_tracer:with_span(Tracer, Span, Fun).
+    SpanCtx = ot_tracer:start_span(Tracer, SpanName, Opts),
+    try Fun()
+    after
+        ot_tracer:end_span(Tracer, SpanCtx)
+    end.
 
 -spec end_span() -> ok.
 end_span() ->
