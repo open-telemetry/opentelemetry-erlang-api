@@ -22,7 +22,7 @@
 -export([start_span/3,
          with_span/2,
          with_span/3,
-         end_span/1,
+         end_span/2,
          span_module/1,
          current_span_ctx/1,
          get_binary_format/1,
@@ -56,8 +56,8 @@ current_span_ctx(_) ->
 span_module(_) ->
     ot_span_noop.
 
--spec end_span(opentelemetry:tracer()) -> ok.
-end_span(_) ->
+-spec end_span(opentelemetry:tracer(), opentelemetry:span_ctx()) -> ok.
+end_span(_, _) ->
     ok.
 
 -spec get_binary_format(opentelemetry:tracer()) -> binary().
