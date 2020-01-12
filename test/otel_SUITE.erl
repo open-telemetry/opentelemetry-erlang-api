@@ -21,6 +21,6 @@ with_span(_Config) ->
     SpanCtx1 = otel:start_span(<<"span1">>),
 
     %% Returns execution value of passed function
-    ?assertEqual(foo, otel:with_span(<<"span">>, fun () -> foo end)),
+    ?assertEqual(foo, otel:with_span(<<"span">>, fun (_Ctx) -> foo end)),
     %% Resets span context to te one before the call
     ?assertEqual(SpanCtx1, otel:current_span_ctx()).
