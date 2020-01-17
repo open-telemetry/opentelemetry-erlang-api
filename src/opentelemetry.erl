@@ -29,8 +29,10 @@
 -module(opentelemetry).
 
 -export([set_default_tracer/1,
+         set_tracer/2,
          set_default_context_manager/1,
          get_context_manager/0,
+         register_tracer/2,
          get_tracer/0,
          get_tracer/1,
          set_http_extractor/1,
@@ -114,9 +116,17 @@
 set_default_tracer(Tracer) ->
     verify_and_set_term(Tracer, default_tracer, ot_tracer).
 
+-spec set_tracer(atom(), tracer()) -> boolean().
+set_tracer(Name, Tracer) ->
+    verify_and_set_term(Tracer, Name, ot_tracer).
+
 -spec set_default_context_manager(ot_ctx:context_manager()) -> boolean().
 set_default_context_manager(ContextManager) ->
     verify_and_set_term(ContextManager, context_manager, ot_ctx).
+
+-spec register_tracer(atom(), string()) -> ok.
+register_tracer(Name, Vsn) ->
+    ot_tracer_provider:register_tracer(Name, Vsn).
 
 -spec get_context_manager() -> ot_ctx:context_manager().
 get_context_manager() ->
@@ -127,8 +137,8 @@ get_tracer() ->
     persistent_term:get({?MODULE, default_tracer}, {ot_tracer_noop, []}).
 
 -spec get_tracer(unicode:unicode_binary()) -> tracer().
-get_tracer(_Name) ->
-    persistent_term:get({?MODULE, default_tracer}, {ot_tracer_noop, []}).
+get_tracer(Name) ->
+    persistent_term:get({?MODULE, Name}, get_tracer()).
 
 set_http_extractor(List) when is_list(List) ->
     persistent_term:put({?MODULE, http_extractor}, List);
