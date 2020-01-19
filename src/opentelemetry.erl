@@ -124,7 +124,7 @@ set_tracer(Name, Tracer) ->
 set_default_context_manager(ContextManager) ->
     verify_and_set_term(ContextManager, context_manager, ot_ctx).
 
--spec register_tracer(atom(), string()) -> ok.
+-spec register_tracer(atom(), string()) -> boolean().
 register_tracer(Name, Vsn) ->
     ot_tracer_provider:register_tracer(Name, Vsn).
 
