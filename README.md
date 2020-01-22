@@ -10,7 +10,13 @@ This separation is done so you should feel comfortable instrumenting your Erlang
 
 ## Use
 
-When instrumenting an application to be used as a dependency of other projects it is best practice to register a `Tracer` with a name and a version using the application's name and version.
+When instrumenting an Application to be used as a dependency of other projects it is best practice to register a `Tracer` with a name and a version using the Application's name and version. This should be the name and version of the Application that has the `opentelemetry` calls being written in it, not the name of the application it might be being used to instrument. For example, an [Elli](https://github.com/elli-lib/elli) middleware to add tracing to the Elli HTTP server would *not* be named `elli`, it would be the name of the middleware Application, like `opentelemetry_elli`.
+
+Registration is done through a single process and uses a [persistent_term](https://erlang.org/doc/man/persistent_term.html), so should be done only once per-Application. Updating a registration is allowed, so updating the version on a release upgrade can, and should, be done, but will involve the performance penalty of updating a [persistent_term](https://erlang.org/doc/man/persistent_term.html).
+
+Naming the `Tracers` provides additional metadata on spans and allows the user of your application to disable the traces from the dependency if it is needed.
+
+### Registering and Using Tracers
 
 If it is a runnable application then this registration should happen in `start/2`, example below is adding `Tracer` registration to the Postgres library [pgo](https://github.com/erleans/pgo):
 
@@ -18,7 +24,7 @@ If it is a runnable application then this registration should happen in `start/2
 start(_StartType, _StartArgs) ->
 ...
     {ok, Vsn} = application:get_key(pgo, vsn),
-    opentelemetry:register_tracer(pgo, Vsn),
+    _ = opentelemetry:register_tracer(pgo, Vsn),
 ...
 ```
 
@@ -29,7 +35,7 @@ Tracer = opentelemetry:get_tracer(pgo),
 ot_tracer:with_span(Tracer, <<"pgo:query/3">>, fun() -> ... end).
 ```
 
-Naming the `Tracers` allows the user of your application to disable the traces from the dependency if it is needed.
+A `Tracer` variable can be passed through your Application's calls so `get_tracer` only has to be called once, it is safe to store it in the state of a `gen_server` and to pass across process boundaries.
 
 If the application does not have a `start/2` there may be another function that is always called before the library would create any spans. For example, the [Elli](https://github.com/elli-lib/elli) middleware for OpenTelemetry instrumentation registers the `Tracer` during Elli startup:
 
