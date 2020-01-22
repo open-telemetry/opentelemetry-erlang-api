@@ -80,7 +80,7 @@
 -type span_id()            :: non_neg_integer().
 
 -type span_ctx()           :: #span_ctx{}.
--type span()               :: #span{}.
+-type span()               :: term().
 -type span_name()          :: unicode:unicode_binary().
 
 -type attribute_key()      :: unicode:unicode_binary().
