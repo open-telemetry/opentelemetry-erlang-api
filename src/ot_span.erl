@@ -27,7 +27,7 @@
          set_status/3,
          update_name/3]).
 
--include("opentelemetry.hrl").
+-include("opentelemetry.hrl").2
 
 -type start_opts() :: #{parent => undefined | opentelemetry:span() | opentelemetry:span_ctx(),
                         attributes => opentelemetry:attributes(),
