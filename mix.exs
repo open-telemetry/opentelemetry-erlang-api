@@ -41,8 +41,11 @@ defmodule OpenTelemetry.MixProject do
   end
 
   def erlang_docs() do
-    [{"README.md", [title: "Overview"]} |
-    (for file <- Path.wildcard("edoc/*.md"), file != "edoc/README.md", do:
-      {file, [title: Path.basename(file, ".md")]})]
+    files =
+      for file <- Path.wildcard("edoc/*.md"),
+        file != "edoc/README.md",
+        do: {file, [title: Path.basename(file, ".md")]}
+
+    [{"README.md", [title: "Overview"]} | files]
   end
 end
