@@ -14,9 +14,10 @@ defmodule OpenTelemetry.MixProject do
       # source_url: "https://github.com/USER/PROJECT",
       # homepage_url: "http://YOUR_PROJECT_HOMEPAGE",
       docs: [
-        main: "OpenTelemetry"
+        markdown_processor: ExDoc.Markdown.Cmark,
+        main: "OpenTelemetry",
         # logo: "path/to/logo.png",
-        # extras: ["README.md"]
+        extras: erlang_docs()
       ]
     ]
   end
@@ -34,7 +35,14 @@ defmodule OpenTelemetry.MixProject do
 
   def deps() do
     [
+      {:cmark, "~> 0.7", only: :dev, runtime: false},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false}
     ]
+  end
+
+  def erlang_docs() do
+    [{"README.md", [title: "Overview"]} |
+    (for file <- Path.wildcard("edoc/*.md"), file != "edoc/README.md", do:
+      {file, [title: Path.basename(file, ".md")]})]
   end
 end
