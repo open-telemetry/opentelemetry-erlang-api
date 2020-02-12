@@ -18,7 +18,12 @@ defmodule OpenTelemetry.MixProject do
         main: "OpenTelemetry",
         # logo: "path/to/logo.png",
         extras: erlang_docs()
-      ]
+      ],
+      aliases: [
+        # when build docs first build edocs with rebar3
+        docs: ["cmd rebar3 edoc", "docs"]
+      ],
+      package: package()
     ]
   end
 
@@ -37,6 +42,16 @@ defmodule OpenTelemetry.MixProject do
     [
       {:cmark, "~> 0.7", only: :dev, runtime: false},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false}
+    ]
+  end
+
+  defp package() do
+    [
+      description: "OpenTelemetry API",
+      build_tools: ["rebar3", "mix"],
+      licenses: ["Apache-2.0"],
+      links: %{"GitHub" => "https://github.com/open-telemetry/opentelemetry-erlang-api",
+               "OpenTelemetry.io" => "https://opentelemetry.io"}
     ]
   end
 
