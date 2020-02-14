@@ -3,7 +3,12 @@ defmodule OpenTelemetry.Meter do
 
       require OpenTelemetry.Meter
 
+      OpenTelemetry.register_application_meter(Your.Application)
+
       OpenTelemetry.Meter.new_instruments([...])
+      bound = OpenTelemetry.Meter.bind(\"some.latency\", [])
+      # measure time spent on some function and then record it
+      OpenTelemetry.Meter.record(bound, time)
   """
 
   defmacro new_instruments(list) do
