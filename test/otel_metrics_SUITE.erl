@@ -6,9 +6,10 @@
 -include_lib("common_test/include/ct.hrl").
 
 -include("opentelemetry.hrl").
+-include("meter.hrl").
 
 all() ->
-    [noop_metrics].
+    [noop_metrics, macros].
 
 init_per_suite(Config) ->
     application:load(opentelemetry_api),
@@ -19,8 +20,9 @@ end_per_suite(_Config) ->
 
 noop_metrics(_Config) ->
     Meter = opentelemetry:get_meter(),
+    ?assertMatch({ot_meter_noop, _}, Meter),
 
-    ot_meter:new_instruments(Meter, [#{name => <<"measure-1">>,
+    ot_meter:new_instruments(Meter, [#{name => <<"noop-measure-1">>,
                                        description => <<"some description">>,
                                        kind => counter,
                                        label_keys => [],
@@ -28,4 +30,14 @@ noop_metrics(_Config) ->
                                        absolute => true,
                                        unit => one}]),
 
+    ok.
+
+macros(_Config) ->
+    ?new_instruments([#{name => <<"macros-measure-1">>,
+                        description => <<"some description">>,
+                        kind => counter,
+                        label_keys => [],
+                        monotonic => true,
+                        absolute => true,
+                        unit => one}]),
     ok.
