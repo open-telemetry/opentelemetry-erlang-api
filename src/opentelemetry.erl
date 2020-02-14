@@ -35,6 +35,8 @@
          get_context_manager/0,
          register_tracer/2,
          register_application_tracer/1,
+         register_meter/2,
+         register_application_meter/1,
          get_tracer/0,
          get_tracer/1,
          get_meter/0,
@@ -142,6 +144,14 @@ register_tracer(Name, Vsn) ->
 register_application_tracer(Name) ->
     ot_tracer_provider:register_application_tracer(Name).
 
+-spec register_meter(atom(), string()) -> boolean().
+register_meter(Name, Vsn) ->
+    ot_meter_provider:register_meter(Name, Vsn).
+
+-spec register_application_meter(atom()) -> boolean().
+register_application_meter(Name) ->
+    ot_meter_provider:register_application_meter(Name).
+
 -spec get_context_manager() -> ot_ctx:context_manager().
 get_context_manager() ->
     persistent_term:get({?MODULE, context_manager}, {ot_ctx_noop, []}).
@@ -159,8 +169,8 @@ get_meter() ->
     persistent_term:get({?MODULE, default_meter}, {ot_meter_noop, []}).
 
 -spec get_meter(unicode:unicode_binary()) -> meter().
-get_meter(_Name) ->
-    persistent_term:get({?MODULE, default_meter}, {ot_meter_noop, []}).
+get_meter(Name) ->
+    persistent_term:get({?MODULE, Name}, {ot_meter_noop, []}).
 
 set_http_extractor(List) when is_list(List) ->
     persistent_term:put({?MODULE, http_extractor}, List);
