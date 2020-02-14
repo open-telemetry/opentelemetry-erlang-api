@@ -38,7 +38,7 @@
 
 -type name() :: unicode:unicode_binary().
 -type description() :: unicode:unicode_binary().
--type instrument_kind() :: counter | gauge | measure.
+-type instrument_kind() :: counter | measure.
 -type unit() :: atom().
 -type instrument_mode() :: monotonic | non_monotonic | absolute | non_absolute.
 -type input_type() :: integer | float.
