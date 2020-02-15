@@ -19,7 +19,7 @@
 
 -export([record/3,
          record/4,
-         measurement/3]).
+         measurement/2]).
 
 -spec record(opentelemetry:meter(), ot_meter:name(), number(), ot_meter:label_set()) -> boolean().
 record(Meter, Name, Number, LabelSet) ->
@@ -29,7 +29,7 @@ record(Meter, Name, Number, LabelSet) ->
 record(Meter, BoundInstrument, Number) ->
     ot_meter:record(Meter, BoundInstrument, Number).
 
--spec measurement(opentelemetry:meter(), ot_meter:bound_instrument() | ot_meter:name(), number())
+-spec measurement(ot_meter:bound_instrument() | ot_meter:name(), number())
                  -> {ot_meter:bound_instrument() | ot_meter:name(), number()}.
-measurement(_Meter, NameOrInstrument, Number) ->
+measurement(NameOrInstrument, Number) ->
     {NameOrInstrument, Number}.

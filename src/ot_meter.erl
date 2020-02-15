@@ -31,13 +31,16 @@
 
 -callback set_observer_callback(opentelemetry:meter(), ot_meter:name(), ot_observer:callback()) -> boolean().
 
+-callback update_observer(ot_observer:observer_result(), number(), label_set()) -> ok.
+
 -export([new_instruments/2,
          bind/3,
          release/2,
          record/3,
          record/4,
          record_batch/3,
-         set_observer_callback/3]).
+         set_observer_callback/3,
+         update_observer/3]).
 
 -type name() :: unicode:unicode_binary().
 -type description() :: unicode:unicode_binary().
@@ -100,3 +103,7 @@ record_batch(Meter={Module, _}, LabelSet, Measurements) ->
 -spec set_observer_callback(opentelemetry:meter(), ot_meter:name(), ot_observer:callback()) -> boolean().
 set_observer_callback(Meter={Module, _}, Observer, Callback) ->
     Module:set_observer_callback(Meter, Observer, Callback).
+
+-spec update_observer(ot_observer:observer_result(), number(), label_set()) -> ok.
+update_observer(ObserverResult={Module, _}, Number, LabelSet) ->
+    Module:update_observer(ObserverResult, Number, LabelSet).
