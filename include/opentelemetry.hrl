@@ -37,7 +37,7 @@
           %% 64 bit int span id
           span_id           :: opentelemetry:span_id() | undefined,
           %% 8-bit integer, lowest bit is if it is sampled
-          trace_flags = 1 :: integer() | undefined,
+          trace_flags = 1   :: integer() | undefined,
           %% Tracestate represents tracing-system specific context in a list of key-value pairs.
           %% Tracestate allows different vendors propagate additional information and
           %% inter-operate with their legacy Id formats.
@@ -50,7 +50,7 @@
           %% this field is not propagated and is only here as an implementation optimization
           %% If true updates like adding events are done on the span. The same as if the
           %% trace flags lowest bit is 1 but simply not propagated.
-          is_recorded       :: boolean() | undefined
+          is_recording      :: boolean() | undefined
          }).
 
 -record(link, {
