@@ -1,12 +1,5 @@
 defmodule OpenTelemetry.Span do
 
-  defmacro is_recording_events() do
-    quote do
-      tracer = :opentelemetry.get_tracer(__MODULE__)
-      :ot_span.is_recording_events(tracer, :ot_tracer.current_span_ctx(tracer))
-    end
-  end
-
   defmacro set_attribute(key, value) do
     quote do
       tracer = :opentelemetry.get_tracer(__MODULE__)
