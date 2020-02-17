@@ -1,10 +1,10 @@
-# Erlang OpenTelemetry API
+# Erlang/Elixir OpenTelemetry API
 
-This is the API portion of [OpenTelemetry](https://opentelemetry.io/) for Erlang and Elixir applications.
+This is the API portion of [OpenTelemetry](https://opentelemetry.io/) for Erlang and Elixir Applications.
 
-This is a library, it does not start any processes, and should be the only OpenTelemetry dependency of Erlang/Elixir applications. 
+This is a library, it does not start any processes, and should be the only OpenTelemetry dependency of Erlang/Elixir Applications. 
 
-The end user of your Application can then choose to include the [OpenTelemetry implementation](https://github.com/open-telemetry/opentelemetry-erlang) Application. If the implementation Application is not in the final release the OpenTelemetry instrumentation will all be noops. This means no processes started, no ETS tables created and nothing added to the process dictionary.
+The end user of your Application can then choose to include the [OpenTelemetry implementation](https://github.com/open-telemetry/opentelemetry-erlang) Application. If the implementation Application is not in the final release the OpenTelemetry instrumentation will all be no-ops. This means no processes started, no ETS tables created and nothing added to the process dictionary.
 
 This separation is done so you should feel comfortable instrumenting your Erlang/Elixir Application with OpenTelemetry and not worry that a complicated dependency is being forced on your users.
 
@@ -99,3 +99,17 @@ def some_fun() do
     end
 end
 ```
+
+### Including the OpenTelemetry SDK
+
+For traces to actually be tracked, propagated and exported, the [opentelemetry](https://github.com/open-telemetry/opentelemetry-erlang) Application must be included as a dependency of your project, likely as part of a [Release](https://erlang.org/doc/design_principles/release_structure.html) and not as a dependency of an individual Application within the Release.
+
+See the [Using section](https://github.com/open-telemetry/opentelemetry-erlang#using) of the [OpenTelemetry-Erlang](https://github.com/open-telemetry/opentelemetry-erlang) repository for details.
+
+### Exporting Spans
+
+Exporters can be found as separate Applications on Github under the [OpenTelemetry Beam Organization](https://github.com/opentelemetry-beam).
+
+- [Zipkin](https://github.com/opentelemetry-beam/opentelemetry_zipkin)
+
+
