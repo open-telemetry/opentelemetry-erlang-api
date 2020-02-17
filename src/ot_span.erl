@@ -43,7 +43,6 @@
 -export_type([start_opts/0]).
 
 -callback get_ctx(opentelemetry:span()) -> opentelemetry:span_ctx().
--callback is_recording_events(opentelemetry:span_ctx()) -> boolean().
 -callback set_attribute(opentelemetry:span_ctx(),
                         opentelemetry:attribute_key(),
                         opentelemetry:attribute_value()) -> boolean().
