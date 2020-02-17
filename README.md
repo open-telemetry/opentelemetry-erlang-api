@@ -112,4 +112,6 @@ Exporters can be found as separate Applications on Github under the [OpenTelemet
 
 - [Zipkin](https://github.com/opentelemetry-beam/opentelemetry_zipkin)
 
+## Contributing
 
+See the [contributing file](CONTRIBUTING.md).
