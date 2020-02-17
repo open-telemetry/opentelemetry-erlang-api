@@ -54,6 +54,9 @@ defmodule OpenTelemetry do
   """
   @type span_id() :: non_neg_integer()
 
+  @type attribute_key() :: String.t()
+  @type attribute_value() :: String.t() | integer() | float() | boolean()
+
   @typedoc """
   Attributes are a collection of key/value pairs. The value can be a string,
   an integer, a double or the boolean values `true` or `false`. Note, global attributes
@@ -66,7 +69,7 @@ defmodule OpenTelemetry do
        {\"abc.com/myattribute\", True}
        {\"abc.com/score\", 10.239}]
   """
-  @type attributes() :: [{String.t(), String.t() | integer() | float() | boolean()}]
+  @type attributes() :: [{attribute_key(), attribute_value()}]
 
   @typedoc """
   Tracestate represents tracing-system specific context in a list of key-value pairs.
