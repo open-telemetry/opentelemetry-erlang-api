@@ -13,6 +13,8 @@ defmodule OpenTelemetry do
       require OpenTelemetry.Tracer
       require OpenTelemetry.Span
 
+      OpenTelemetry.register_application_tracer(:this_otp_app)
+
       Tracer.start_span(\"some-span\")
       ...
       ecto_event = OpenTelemetry.event(\"ecto.query\", [{\"query\", query}, {\"total_time\", total_time}])
@@ -98,10 +100,23 @@ defmodule OpenTelemetry do
   @type status() :: :opentelemetry.status()
 
   @doc """
+  Registering a [Named Tracer](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/api-tracing.md#obtaining-a-tracer) with the name of an OTP Application enables each module in
+  the Application to be mapped to the Named Tracer, named for the Application and using the
+  version of the currently loaded Application by that name.
+
+  Macros in `OpenTelemetry.Tracer` use the name of the module they are being used in in order
+  to lookup the Named Tracer registered for that module and using it for trace operations.
+  """
+  @spec register_application_tracer(atom()) :: boolean()
+  defdelegate register_application_tracer(otp_app), to: :opentelemetry
+
+  @doc """
   Current time in UNIX Epoch time, nanoseconds since 00:00:00 UTC on 1 January 1970.
   """
   @spec timestamp() :: integer()
   defdelegate timestamp(), to: :opentelemetry
+
+  # span item functions
 
   @doc """
   Creates a `t:link/0`.
