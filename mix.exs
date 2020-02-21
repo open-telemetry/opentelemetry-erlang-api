@@ -31,6 +31,10 @@ defmodule OpenTelemetry.MixProject do
     ]
   end
 
+  defp version(version) when is_list(version) do
+    List.to_string(version)
+  end
+
   defp version({:file, path}) do
     path
     |> File.read!()
@@ -66,9 +70,9 @@ defmodule OpenTelemetry.MixProject do
     files =
       for file <- Path.wildcard("edoc/*.md"),
         file != "edoc/README.md",
-        do: {file, [title: Path.basename(file, ".md")]}
+        do: {String.to_atom(file), [title: Path.basename(file, ".md")]}
 
-    [{"README.md", [title: "Overview"]} | files]
+    [{:"README.md", [title: "Overview"]} | files]
   end
 
   defp load_config do
