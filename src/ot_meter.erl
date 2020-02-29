@@ -21,13 +21,13 @@
 
 -callback labels(opentelemetry:meter(), list() | map()) -> label_set().
 
--callback record(opentelemetry:meter(), bound_instrument(), number()) -> boolean().
+-callback record(bound_instrument(), number()) -> boolean().
 -callback record(opentelemetry:meter(), name(), number(), label_set()) -> boolean().
 
 -callback record_batch(opentelemetry:meter(), [{instrument(), number()}], label_set()) -> boolean().
 
 -callback bind(opentelemetry:meter(), instrument(), label_set()) -> bound_instrument().
--callback release(opentelemetry:meter(), bound_instrument()) -> ok.
+-callback release(bound_instrument()) -> ok.
 
 -callback set_observer_callback(opentelemetry:meter(), ot_meter:name(), ot_observer:callback()) -> boolean().
 
@@ -35,8 +35,8 @@
 
 -export([new_instruments/2,
          bind/3,
-         release/2,
-         record/3,
+         release/1,
+         record/2,
          record/4,
          record_batch/3,
          set_observer_callback/3,
@@ -59,7 +59,7 @@
                              unit => unit()}.
 
 -type instrument() :: term().
--type bound_instrument() :: term().
+-type bound_instrument() :: {opentelemetry:meter(), term()}.
 
 -type label_key() :: unicode:unicode_binary().
 -type label_value() :: unicode:unicode_binary().
@@ -82,18 +82,18 @@ new_instruments(Meter={Module, _}, List) ->
 
 -spec bind(opentelemetry:meter(), name(), label_set()) -> bound_instrument().
 bind(Meter={Module, _}, Name, LabelSet) ->
-    Module:bind(Meter, Name, LabelSet).
+    {Meter, Module:bind(Meter, Name, LabelSet)}.
 
--spec release(opentelemetry:meter(), bound_instrument()) -> ok.
-release(Meter={Module, _}, BoundInstrument) ->
+-spec release(bound_instrument()) -> ok.
+release({Meter={Module, _}, BoundInstrument}) ->
     Module:release(Meter, BoundInstrument).
 
 -spec record(opentelemetry:meter(), name(), number(), label_set()) -> boolean().
 record(Meter={Module, _}, Name, Number, LabelSet) ->
     Module:record(Meter, Name, Number, LabelSet).
 
--spec record(opentelemetry:meter(), bound_instrument(), number()) -> boolean().
-record(Meter={Module, _}, BoundInstrument, Number) ->
+-spec record(bound_instrument(), number()) -> boolean().
+record({Meter={Module, _}, BoundInstrument}, Number) ->
     Module:record(Meter, BoundInstrument, Number).
 
 -spec record_batch(opentelemetry:meter(), label_set(), [measurement()]) -> boolean().
