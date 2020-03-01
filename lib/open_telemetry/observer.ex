@@ -3,7 +3,7 @@ defmodule OpenTelemetry.Observer do
 
       require OpenTelemetry.Observer
 
-      OpenTelemetry.Observer.set_callback(\"some.counter\", fn o -> OpenTelemetry.Observer.update(o, 33))
+      OpenTelemetry.Observer.set_callback(\"some.counter\", fn o -> OpenTelemetry.Observer.observe(o, 33, []))
   """
 
   defmacro set_callback(observer, callback) do
@@ -12,5 +12,5 @@ defmodule OpenTelemetry.Observer do
     end
   end
 
-  defdelegate update(observer_result, number, label_set), to: :ot_observer
+  defdelegate observe(observer_result, number, label_set), to: :ot_observer
 end

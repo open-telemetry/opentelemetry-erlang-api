@@ -21,17 +21,18 @@
 
 -callback labels(opentelemetry:meter(), list() | map()) -> label_set().
 
--callback record(bound_instrument(), number()) -> boolean().
--callback record(opentelemetry:meter(), name(), number(), label_set()) -> boolean().
+-callback record(opentelemetry:meter(), term (), number()) -> ok.
+-callback record(opentelemetry:meter(), name(), label_set(), number()) -> ok.
 
--callback record_batch(opentelemetry:meter(), [{instrument(), number()}], label_set()) -> boolean().
+-callback record_batch(opentelemetry:meter(), [{instrument(), number()}], label_set()) -> ok.
 
--callback bind(opentelemetry:meter(), instrument(), label_set()) -> bound_instrument().
--callback release(bound_instrument()) -> ok.
+-callback bind(opentelemetry:meter(), instrument(), label_set()) -> term().
+-callback release(opentelemetry:meter(), term()) -> ok.
 
--callback set_observer_callback(opentelemetry:meter(), ot_meter:name(), ot_observer:callback()) -> boolean().
+-callback register_observer(opentelemetry:meter(), ot_meter:name(), ot_observer:callback()) -> ok | unknown_instrument.
+-callback set_observer_callback(opentelemetry:meter(), ot_meter:name(), ot_observer:callback()) -> ok | unknown_instrument.
 
--callback update_observer(ot_observer:observer_result(), number(), label_set()) -> ok.
+-callback observe(ot_observer:observer_result(), number(), label_set()) -> ok.
 
 -export([new_instruments/2,
          bind/3,
@@ -39,12 +40,13 @@
          record/2,
          record/4,
          record_batch/3,
+         register_observer/3,
          set_observer_callback/3,
-         update_observer/3]).
+         observe/3]).
 
 -type name() :: unicode:unicode_binary().
 -type description() :: unicode:unicode_binary().
--type instrument_kind() :: counter | measure.
+-type instrument_kind() :: counter | observer | measure.
 -type unit() :: atom().
 -type instrument_mode() :: monotonic | non_monotonic | absolute | non_absolute.
 -type input_type() :: integer | float.
@@ -88,22 +90,28 @@ bind(Meter={Module, _}, Name, LabelSet) ->
 release({Meter={Module, _}, BoundInstrument}) ->
     Module:release(Meter, BoundInstrument).
 
--spec record(opentelemetry:meter(), name(), number(), label_set()) -> boolean().
+-spec record(opentelemetry:meter(), name(), number(), label_set()) -> ok.
 record(Meter={Module, _}, Name, Number, LabelSet) ->
     Module:record(Meter, Name, Number, LabelSet).
 
--spec record(bound_instrument(), number()) -> boolean().
+-spec record(bound_instrument(), number()) -> ok.
 record({Meter={Module, _}, BoundInstrument}, Number) ->
     Module:record(Meter, BoundInstrument, Number).
 
--spec record_batch(opentelemetry:meter(), label_set(), [measurement()]) -> boolean().
+-spec record_batch(opentelemetry:meter(), label_set(), [measurement()]) -> ok.
 record_batch(Meter={Module, _}, LabelSet, Measurements) ->
     Module:record_batch(Meter, LabelSet, Measurements).
 
--spec set_observer_callback(opentelemetry:meter(), ot_meter:name(), ot_observer:callback()) -> boolean().
-set_observer_callback(Meter={Module, _}, Observer, Callback) ->
-    Module:set_observer_callback(Meter, Observer, Callback).
+-spec register_observer(opentelemetry:meter(), ot_meter:name(), ot_observer:callback())
+                       -> ok | unknown_instrument.
+register_observer(Meter={Module, _}, Name, Callback) ->
+    Module:register_observer(Meter, Name, Callback).
 
--spec update_observer(ot_observer:observer_result(), number(), label_set()) -> ok.
-update_observer(ObserverResult={Module, _}, Number, LabelSet) ->
-    Module:update_observer(ObserverResult, Number, LabelSet).
+-spec set_observer_callback(opentelemetry:meter(), ot_meter:name(), ot_observer:callback())
+                           -> ok | unknown_instrument.
+set_observer_callback(Meter={Module, _}, Name, Callback) ->
+    Module:set_observer_callback(Meter, Name, Callback).
+
+-spec observe(ot_observer:observer_result(), number(), label_set()) -> ok.
+observe({Module, Instrument}, Number, LabelSet) ->
+    Module:observe(Instrument, Number, LabelSet).

@@ -30,6 +30,7 @@
 
 -export([set_default_tracer/1,
          set_tracer/2,
+         set_meter/2,
          set_default_meter/1,
          set_default_context_manager/1,
          get_context_manager/0,
@@ -131,6 +132,10 @@ set_tracer(Name, Tracer) ->
 -spec set_default_meter(meter()) -> boolean().
 set_default_meter(Tracer) ->
     verify_and_set_term(Tracer, default_meter, ot_meter).
+
+-spec set_meter(atom(), meter()) -> boolean().
+set_meter(Name, Meter) ->
+    verify_and_set_term(Meter, Name, ot_meter).
 
 -spec set_default_context_manager(ot_ctx:context_manager()) -> boolean().
 set_default_context_manager(ContextManager) ->

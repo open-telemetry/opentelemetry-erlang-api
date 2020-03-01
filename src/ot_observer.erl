@@ -18,9 +18,12 @@
 -module(ot_observer).
 
 -export([set_callback/3,
-         update/3]).
+         observe/3]).
 
--type callback() :: fun((term()) -> ok).
+%% function called with an `observer_result' argument to update observer
+-type callback() :: fun((observer_result()) -> ok).
+
+%% value containing all information needed by the SDK to record an update
 -type observer_result() :: term().
 
 -export_type([callback/0]).
@@ -29,6 +32,6 @@
 set_callback(Meter, Observer, Callback) ->
     ot_meter:set_observer_callback(Meter, Observer, Callback).
 
--spec update(observer_result(), number(), ot_meter:label_set()) -> ok.
-update(ObserverResult, Number, LabelSet) ->
-    ot_meter:update_observer(ObserverResult, Number, LabelSet).
+-spec observe(observer_result(), number(), ot_meter:label_set()) -> ok.
+observe(ObserverResult, Number, LabelSet) ->
+    ot_meter:observe(ObserverResult, Number, LabelSet).
