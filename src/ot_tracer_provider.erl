@@ -25,7 +25,8 @@
 
 -export([init/1,
          handle_call/3,
-         handle_cast/2]).
+         handle_cast/2,
+         code_change/3]).
 
 -type cb_state() :: term().
 
@@ -80,5 +81,11 @@ handle_call(_Msg, _From, State) ->
 
 handle_cast(_Msg, State) ->
     {noreply, State}.
+
+%% TODO: Use `Extra' as options to update the state like the sampler?
+code_change(_OldVsn, State=#state{callback=Cb,
+                                  cb_state=CbState}, _Extra) ->
+    NewCbState = Cb:code_change(CbState),
+    {ok, State#state{cb_state=NewCbState}}.
 
 %%
