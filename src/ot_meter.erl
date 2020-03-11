@@ -19,8 +19,6 @@
 
 -callback new_instruments(opentelemetry:meter(), [instrument_opts()]) -> boolean().
 
--callback labels(opentelemetry:meter(), list() | map()) -> label_set().
-
 -callback record(opentelemetry:meter(), term (), number()) -> ok.
 -callback record(opentelemetry:meter(), name(), label_set(), number()) -> ok.
 
@@ -44,7 +42,12 @@
          set_observer_callback/3,
          observe/3]).
 
+-type label_key() :: unicode:unicode_binary().
+-type label_value() :: unicode:unicode_binary().
+-type label_set() :: #{label_key() => label_value()}.
+
 -type name() :: unicode:unicode_binary().
+-type key() :: {name(), label_set()}.
 -type description() :: unicode:unicode_binary().
 -type instrument_kind() :: counter | observer | measure.
 -type unit() :: atom().
@@ -63,13 +66,10 @@
 -type instrument() :: term().
 -type bound_instrument() :: {opentelemetry:meter(), term()}.
 
--type label_key() :: unicode:unicode_binary().
--type label_value() :: unicode:unicode_binary().
--type label_set() :: #{label_key() => label_value()}.
-
 -type measurement() :: {bound_instrument() | name(), number()}.
 
--export_type([name/0,
+-export_type([key/0,
+              name/0,
               description/0,
               instrument_kind/0,
               input_type/0,
