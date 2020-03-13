@@ -17,17 +17,17 @@
 %%%-------------------------------------------------------------------------
 -module(ot_counter).
 
--export([add/3,
+-export([add/2,
          add/4,
          measurement/2]).
 
--spec add(opentelemetry:meter(), ot_meter:name(), number(), ot_meter:label_set()) -> boolean().
+-spec add(ot_meter:bound_instrument(), number()) -> ok.
+add(BoundInstrument, Number) ->
+    ot_meter:record(BoundInstrument, Number).
+
+-spec add(opentelemetry:meter(), ot_meter:name(), number(), ot_meter:label_set()) -> ok.
 add(Meter, Name, Number, LabelSet) ->
     ot_meter:record(Meter, Name, Number, LabelSet).
-
--spec add(opentelemetry:meter(), ot_meter:bound_instrument(), number()) -> boolean().
-add(Meter, BoundInstrument, Number) ->
-    ot_meter:record(Meter, BoundInstrument, Number).
 
 -spec measurement(ot_meter:bound_instrument() | ot_meter:name(), number())
                  -> {ot_meter:bound_instrument() | ot_meter:name(), number()}.

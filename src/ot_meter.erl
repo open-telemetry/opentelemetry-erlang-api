@@ -44,14 +44,13 @@
 
 -type label_key() :: unicode:unicode_binary().
 -type label_value() :: unicode:unicode_binary().
--type label_set() :: #{label_key() => label_value()}.
+-type label_set() :: [{label_key(), label_value()}].
 
 -type name() :: unicode:unicode_binary().
 -type key() :: {name(), label_set()}.
 -type description() :: unicode:unicode_binary().
 -type instrument_kind() :: counter | observer | measure.
 -type unit() :: atom().
--type instrument_mode() :: monotonic | non_monotonic | absolute | non_absolute.
 -type input_type() :: integer | float.
 
 -type instrument_opts() :: #{name := name(),
@@ -59,8 +58,6 @@
                              kind := instrument_kind(),
                              type => input_type(),
                              label_keys => [label_key()],
-                             monotonic => boolean(),
-                             absolute => boolean(),
                              unit => unit()}.
 
 -type instrument() :: term().
@@ -74,7 +71,6 @@
               instrument_kind/0,
               input_type/0,
               unit/0,
-              instrument_mode/0,
               measurement/0,
               label_set/0]).
 

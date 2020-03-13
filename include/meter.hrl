@@ -16,7 +16,7 @@
         ot_meter:record(?current_meter, Name, Number, LabelSet)).
 
 -define(record(BoundInstrument, Number),
-        ot_meter:record(?current_meter, BoundInstrument, Number)).
+        ot_meter:record(BoundInstrument, Number)).
 
 -define(record_batch(LabelSet, Measurements),
         ot_meter:record_batch(?current_meter, LabelSet, Measurements)).
