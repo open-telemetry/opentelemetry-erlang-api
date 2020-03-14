@@ -141,7 +141,7 @@ get_context_manager() ->
 get_tracer() ->
     persistent_term:get({?MODULE, default_tracer}, {ot_tracer_noop, []}).
 
--spec get_tracer(unicode:unicode_binary()) -> tracer().
+-spec get_tracer(atom()) -> tracer().
 get_tracer(Name) ->
     persistent_term:get({?MODULE, Name}, get_tracer()).
 
@@ -249,7 +249,7 @@ events(List) ->
 -spec status(Code, Message) -> status() | undefined when
       Code :: atom(),
       Message :: unicode:unicode_binary().
-status(Code, Message) when is_integer(Code),
+status(Code, Message) when is_atom(Code),
                            is_binary(Message) ->
     #status{code=Code,
             message=Message};
