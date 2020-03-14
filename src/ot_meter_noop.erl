@@ -17,16 +17,21 @@
 %%%-------------------------------------------------------------------------
 -module(ot_meter_noop).
 
+-behaviour(ot_meter).
+
 -export([new_instruments/2,
          labels/2,
          record/3,
          record/4,
          record_batch/3,
          bind/3,
-         release/2]).
+         release/2,
+         set_observer_callback/3,
+         register_observer/3,
+         observe/3]).
 
 new_instruments(_, _) ->
-    [].
+    true.
 
 labels(_, _) ->
     #{}.
@@ -44,4 +49,13 @@ bind(_, _, _) ->
     [].
 
 release(_, _) ->
+    ok.
+
+set_observer_callback(_, _, _) ->
+    ok.
+
+register_observer(_, _, _) ->
+    ok.
+
+observe(_, _, _) ->
     ok.
