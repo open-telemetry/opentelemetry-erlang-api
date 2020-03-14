@@ -88,7 +88,7 @@ release({Meter={Module, _}, BoundInstrument}) ->
 
 -spec record(opentelemetry:meter(), name(), number(), label_set()) -> ok.
 record(Meter={Module, _}, Name, Number, LabelSet) ->
-    Module:record(Meter, Name, Number, LabelSet).
+    Module:record(Meter, Name, LabelSet, Number).
 
 -spec record(bound_instrument(), number()) -> ok.
 record({Meter={Module, _}, BoundInstrument}, Number) ->
