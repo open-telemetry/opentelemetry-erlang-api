@@ -130,8 +130,8 @@ set_tracer(Name, Tracer) ->
     verify_and_set_term(Tracer, Name, ot_tracer).
 
 -spec set_default_meter(meter()) -> boolean().
-set_default_meter(Tracer) ->
-    verify_and_set_term(Tracer, default_meter, ot_meter).
+set_default_meter(Meter) ->
+    verify_and_set_term(Meter, default_meter, ot_meter).
 
 -spec set_meter(atom(), meter()) -> boolean().
 set_meter(Name, Meter) ->
@@ -175,7 +175,7 @@ get_meter() ->
 
 -spec get_meter(unicode:unicode_binary()) -> meter().
 get_meter(Name) ->
-    persistent_term:get({?MODULE, Name}, {ot_meter_noop, []}).
+    persistent_term:get({?MODULE, Name}, get_meter()).
 
 set_http_extractor(List) when is_list(List) ->
     persistent_term:put({?MODULE, http_extractor}, List);
