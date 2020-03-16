@@ -20,6 +20,7 @@
 -behaviour(gen_server).
 
 -export([start_link/2,
+         resource/0,
          register_application_tracer/1,
          register_tracer/2]).
 
@@ -38,6 +39,16 @@
 
 start_link(ProviderModule, Opts) ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, [ProviderModule, Opts], []).
+
+-spec resource() -> ot_resource:t().
+resource() ->
+    try
+        gen_server:call(?MODULE, resource)
+    catch exit:{noproc, _} ->
+            %% ignore because no SDK has been included and started
+            ot_resource:create([])
+    end.
+
 
 -spec register_tracer(atom(), string()) -> boolean().
 register_tracer(Name, Vsn) ->
@@ -76,6 +87,10 @@ handle_call({register_tracer, Name, Vsn}, _From, State=#state{callback=Cb,
                                                               cb_state=CbState}) ->
     _ = Cb:register_tracer(Name, Vsn, CbState),
     {reply, true, State};
+handle_call(resource, _From, State=#state{callback=Cb,
+                                          cb_state=CbState}) ->
+    Resource = Cb:resource(CbState),
+    {reply, Resource, State};
 handle_call(_Msg, _From, State) ->
     {noreply, State}.
 
