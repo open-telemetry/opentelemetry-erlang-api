@@ -33,6 +33,7 @@
 
 -callback init(term()) -> {ok, cb_state()}.
 -callback register_tracer(atom(), string(), cb_state()) -> boolean().
+-callback resource(cb_state()) -> term() | undefined.
 
 -record(state, {callback :: module(),
                 cb_state :: term()}).
@@ -40,13 +41,13 @@
 start_link(ProviderModule, Opts) ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, [ProviderModule, Opts], []).
 
--spec resource() -> ot_resource:t().
+-spec resource() -> term() | undefined.
 resource() ->
     try
         gen_server:call(?MODULE, resource)
     catch exit:{noproc, _} ->
             %% ignore because no SDK has been included and started
-            ot_resource:create([])
+            undefined
     end.
 
 
