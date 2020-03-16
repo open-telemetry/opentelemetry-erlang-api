@@ -3,7 +3,7 @@ defmodule OpenTelemetry.Counter do
 
       require OpenTelemetry.Counter
 
-      OpenTelemetry.Counter.add(\"some.counter\", 3)
+      OpenTelemetry.Counter.add("some.counter", 3)
   """
 
   defmacro add(name, number, label_set) do

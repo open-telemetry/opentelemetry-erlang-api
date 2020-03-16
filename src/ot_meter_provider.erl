@@ -70,15 +70,11 @@ init([ProviderModule, Opts]) ->
 handle_call({register_meter, Name, Vsn, Modules}, _From, State=#state{callback=Cb,
                                                                       cb_state=CbState}) ->
     _ = Cb:register_meter(Name, Vsn, Modules, CbState),
-    {reply, ok, State};
+    {reply, true, State};
 handle_call({register_meter, Name, Vsn}, _From, State=#state{callback=Cb,
                                                              cb_state=CbState}) ->
     _ = Cb:register_meter(Name, Vsn, CbState),
-    {reply, ok, State};
-handle_call({add_span_processor, SpanProcessor}, _From, State=#state{callback=Cb,
-                                                                     cb_state=CbState}) ->
-    _ = Cb:add_span_processor(SpanProcessor, CbState),
-    {reply, ok, State};
+    {reply, true, State};
 handle_call(_Msg, _From, State) ->
     {noreply, State}.
 
