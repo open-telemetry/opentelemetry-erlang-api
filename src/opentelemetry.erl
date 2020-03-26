@@ -244,27 +244,18 @@ link(_, _, _, _) ->
       Attributes :: attributes().
 event(Name, Attributes) when is_binary(Name),
                              is_list(Attributes) ->
-    #event{time=timestamp(),
-           name=Name,
-           attributes=Attributes};
+    event(erlang:system_time(nanosecond), Name, Attributes);
 event(_, _) ->
     undefined.
 
--spec event(Time, Name, Attributes) -> event() | undefined when
-      Time :: timestamp() | non_neg_integer(),
+-spec event(Timestamp, Name, Attributes) -> event() | undefined when
+      Timestamp :: non_neg_integer(),
       Name :: unicode:unicode_binary(),
       Attributes :: attributes().
-event(Timestamp={Time, Offset}, Name, Attributes) when is_integer(Time),
-                                                       is_integer(Offset),
-                                                       is_binary(Name),
-                                                       is_list(Attributes) ->
-    #event{time=Timestamp,
-           name=Name,
-           attributes=Attributes};
-event(TimeNano, Name, Attributes) when is_integer(TimeNano),
-                                       is_binary(Name),
-                                       is_list(Attributes) ->
-    #event{time=TimeNano,
+event(Timestamp, Name, Attributes) when is_integer(Timestamp),
+                                        is_binary(Name),
+                                        is_list(Attributes) ->
+    #event{system_time_nano=Timestamp,
            name=Name,
            attributes=Attributes};
 event(_, _, _) ->
