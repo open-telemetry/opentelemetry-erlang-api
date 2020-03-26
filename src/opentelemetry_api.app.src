@@ -4,8 +4,7 @@
   {registered, []},
   {applications,
    [kernel,
-    stdlib,
-    wts
+    stdlib
    ]},
   {env,[]},
   {modules, []},

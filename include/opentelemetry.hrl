@@ -61,7 +61,7 @@
          }).
 
 -record(event, {
-          time            :: wts:timestamp() | non_neg_integer(),
+          time            :: opentelemetry:timestamp() | non_neg_integer(),
           name            :: unicode:unicode_binary(),
           attributes = [] :: opentelemetry:attributes()
          }).
