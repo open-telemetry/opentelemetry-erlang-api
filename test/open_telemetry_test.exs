@@ -42,14 +42,4 @@ defmodule OpenTelemetryTest do
       assert []   = Span.tracestate(span)
     end
   end
-
-  test "can establish link to parent trace" do
-    parent_trace_id = 1
-    expected_link = OpenTelemetry.link(parent_trace_id, 2, [], [])
-    Tracer.with_span "span-1", %{ links: [expected_link] } do
-      span = Tracer.current_span_ctx()
-
-      assert parent_trace_id == Span.trace_id(span)
-    end
-  end
 end
