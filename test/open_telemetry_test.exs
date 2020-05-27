@@ -32,4 +32,24 @@ defmodule OpenTelemetryTest do
       end
     end
   end
+
+  test "can deconstruct a span context" do
+    Tracer.with_span "span-1" do
+      span = Tracer.current_span_ctx()
+
+      assert nil != Span.trace_id(span)
+      assert nil != Span.span_id(span)
+      assert []   = Span.tracestate(span)
+    end
+  end
+
+  test "can establish link to parent trace" do
+    parent_trace_id = 1
+    expected_link = OpenTelemetry.link(parent_trace_id, 2, [], [])
+    Tracer.with_span "span-1", %{ links: [expected_link] } do
+      span = Tracer.current_span_ctx()
+
+      assert parent_trace_id == Span.trace_id(span)
+    end
+  end
 end
