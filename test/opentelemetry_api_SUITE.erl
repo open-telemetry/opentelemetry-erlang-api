@@ -35,7 +35,11 @@ can_create_link_from_span(_Config) ->
 
   %% attempt to create a link
   Link = opentelemetry:link(TraceId, SpanId, Attributes, Tracestate),
-  ?assertMatch(Link, #link{}).
+  ?assertMatch(#link{ trace_id = TraceId
+                    , span_id = SpanId
+                    , attributes = Attributes
+                    , tracestate = Tracestate
+                    }, Link).
 
 
 noop_tracer(_Config) ->
