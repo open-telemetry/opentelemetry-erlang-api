@@ -29,19 +29,19 @@ defmodule OpenTelemetry.Span do
   @doc """
   Get the SpanId of a Span.
   """
-  @spec span_id(OpenTelemetry.span()) :: OpenTelemetry.span_id()
+  @spec span_id(OpenTelemetry.span_ctx()) :: OpenTelemetry.span_id()
   defdelegate span_id(span), to: :ot_span
 
   @doc """
   Get the TraceId of a Span.
   """
-  @spec trace_id(OpenTelemetry.span()) :: OpenTelemetry.trace_id()
+  @spec trace_id(OpenTelemetry.span_ctx()) :: OpenTelemetry.trace_id()
   defdelegate trace_id(span), to: :ot_span
 
   @doc """
   Get the Tracestate of a Span.
   """
-  @spec tracestate(OpenTelemetry.span()) :: OpenTelemetry.tracestate()
+  @spec tracestate(OpenTelemetry.span_ctx()) :: OpenTelemetry.tracestate()
   defdelegate tracestate(span), to: :ot_span
 
 

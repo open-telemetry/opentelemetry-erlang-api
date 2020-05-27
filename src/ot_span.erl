@@ -130,13 +130,13 @@ update_name(_, _, _) ->
     false.
 
 %% accessors
--spec trace_id(opentelemetry:span()) -> opentelemetry:trace_id().
+-spec trace_id(opentelemetry:span_ctx()) -> opentelemetry:trace_id().
 trace_id(#span_ctx{ trace_id = TraceId }) -> TraceId.
 
--spec span_id(opentelemetry:span()) -> opentelemetry:span_id().
+-spec span_id(opentelemetry:span_ctx()) -> opentelemetry:span_id().
 span_id(#span_ctx{ span_id = SpanId }) -> SpanId.
 
--spec tracestate(opentelemetry:span()) -> opentelemetry:tracestate().
+-spec tracestate(opentelemetry:span_ctx()) -> opentelemetry:tracestate().
 tracestate(#span_ctx{ tracestate = Tracestate }) -> Tracestate.
 
 %% internal functions
