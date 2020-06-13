@@ -19,6 +19,13 @@ Naming the `Tracers` provides additional metadata on spans and allows the user o
 ### Dependency in Elixir
 
 ``` elixir
+def application do
+    [
+      extra_applications: [:opentelemetry],
+      ...
+    ]
+  end
+
 def deps do
   [
     {:opentelemetry_api, "~> 0.3.0"}
