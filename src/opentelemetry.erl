@@ -236,11 +236,13 @@ links(_) ->
 link(SpanCtx) ->
     link(SpanCtx, []).
 
--spec link(span_ctx(), attributes()) -> link().
+-spec link(span_ctx() | undefined, attributes()) -> link().
 link(#span_ctx{trace_id=TraceId,
                span_id=SpanId,
                tracestate=TraceState}, Attributes) ->
-    ?MODULE:link(TraceId, SpanId, Attributes, TraceState).
+    ?MODULE:link(TraceId, SpanId, Attributes, TraceState);
+link(_, _) ->
+    undefined.
 
 -spec link(TraceId, SpanId, Attributes, TraceState) -> link() | undefined when
       TraceId :: trace_id(),

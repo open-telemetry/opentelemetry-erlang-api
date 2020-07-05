@@ -32,6 +32,9 @@ can_create_link_from_span(_Config) ->
 
     Attributes = [{<<"attr-1">>, <<"value-1">>}],
 
+    ?assertMatch(undefined, opentelemetry:link(undefined)),
+    ?assertMatch(undefined, opentelemetry:link(undefined, Attributes)),
+
     ?assertMatch(#link{trace_id=TraceId,
                        span_id=SpanId,
                        attributes=Attributes,
