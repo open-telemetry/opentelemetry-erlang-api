@@ -20,17 +20,17 @@
 -callback new_instruments(opentelemetry:meter(), [instrument_opts()]) -> boolean().
 
 -callback record(opentelemetry:meter(), term (), number()) -> ok.
--callback record(opentelemetry:meter(), name(), label_set(), number()) -> ok.
+-callback record(opentelemetry:meter(), name(), labels(), number()) -> ok.
 
--callback record_batch(opentelemetry:meter(), [{instrument(), number()}], label_set()) -> ok.
+-callback record_batch(opentelemetry:meter(), [{instrument(), number()}], labels()) -> ok.
 
--callback bind(opentelemetry:meter(), instrument(), label_set()) -> term().
+-callback bind(opentelemetry:meter(), instrument(), labels()) -> term().
 -callback release(opentelemetry:meter(), term()) -> ok.
 
 -callback register_observer(opentelemetry:meter(), ot_meter:name(), ot_observer:callback()) -> ok | unknown_instrument.
 -callback set_observer_callback(opentelemetry:meter(), ot_meter:name(), ot_observer:callback()) -> ok | unknown_instrument.
 
--callback observe(ot_observer:observer_result(), number(), label_set()) -> ok.
+-callback observe(ot_observer:observer_result(), number(), labels()) -> ok.
 
 -export([new_instruments/2,
          bind/3,
@@ -44,7 +44,8 @@
 
 -type label_key() :: unicode:unicode_binary().
 -type label_value() :: unicode:unicode_binary().
--type label_set() :: [{label_key(), label_value()}].
+-type label() :: {label_key(), label_value()}.
+-type labels() :: [label()].
 
 -type name() :: unicode:unicode_binary().
 -type key() :: {name(), label_set()}.
