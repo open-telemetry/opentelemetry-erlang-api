@@ -1,7 +1,32 @@
 %% macros for meters
 %% register a meter for an application with opentelemetry:register_application_meter(AppName)
 
+-define(KIND_COUNTER, ot_counter).
+-define(KIND_UPDOWN_COUNTER, ot_updown_counter).
+-define(KIND_VALUE_RECORDER, ot_value_recorder).
+-define(KIND_VALUE_OBSERVER, ot_value_observer).
+-define(KIND_SUM_OBSERVER, ot_sum_observer).
+-define(KIND_UPDOWN_SUM_OBSERVER, ot_updown_sum_observer).
+
 -define(current_meter, opentelemetry:get_meter(?MODULE)).
+
+-define(new_counter(Meter, Name, Opts),
+        ot_counter:new(?current_meter, Name, Opts)).
+
+-define(new_updown_counter(Meter, Name, Opts),
+        ot_updown_counter:new(?current_meter, Name, Opts)).
+
+-define(new_value_recorder(Meter, Name, Opts),
+        ot_value_recorder:new(?current_meter, Name, Opts)).
+
+-define(new_sum_observer(Meter, Name, Opts),
+        ot_sum_observer:new(?current_meter, Name, Opts)).
+
+-define(new_updown_observer(Meter, Name, Opts),
+        ot_updown_observer:new(?current_meter, Name, Opts)).
+
+-define(new_value_observer(Meter, Name, Opts),
+        ot_value_observer:new(?current_meter, Name, Opts)).
 
 -define(new_instruments(List),
         ot_meter:new_instruments(?current_meter, List)).

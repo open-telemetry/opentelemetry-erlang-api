@@ -1,5 +1,5 @@
 %%%------------------------------------------------------------------------
-%% Copyright 2019, OpenTelemetry Authors
+%% Copyright 2020, OpenTelemetry Authors
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
@@ -15,16 +15,16 @@
 %% @doc
 %% @end
 %%%-------------------------------------------------------------------------
--module(ot_counter).
+-module(ot_sum_observer).
 
 -behaviour(ot_instrument).
+-behaviour(ot_observer).
 
 -export([new/2,
          new/3,
-         add/2,
-         add/4,
          instrument_config/0,
-         measurement/2]).
+         set_callback/3,
+         observe/3]).
 
 -include("meter.hrl").
 
@@ -34,22 +34,17 @@ new(Meter, Name) ->
 
 -spec new(opentelemetry:meter(), ot_meter:name(), ot_meter:instrument_opts()) -> boolean().
 new(Meter, Name, Opts) ->
-    ot_meter:new_instrument(Meter, Name, ?KIND_COUNTER, Opts).
+    ot_meter:new_instrument(Meter, Name, ?KIND_SUM_OBSERVER, Opts).
 
 -spec instrument_config() -> ot_meter:instrument_config().
 instrument_config() ->
     #{monotonic => true,
-      synchronous => true}.
+      synchronous => false}.
 
--spec add(ot_meter:bound_instrument(), number()) -> ok.
-add(BoundInstrument, Number) ->
-    ot_meter:record(BoundInstrument, Number).
+-spec set_callback(opentelemetry:meter(), ot_meter:name(), ot_observer:callback()) -> ok.
+set_callback(Meter, Observer, Callback) ->
+    ot_meter:set_observer_callback(Meter, Observer, Callback).
 
--spec add(opentelemetry:meter(), ot_meter:name(), number(), ot_meter:labels()) -> ok.
-add(Meter, Name, Number, Labels) ->
-    ot_meter:record(Meter, Name, Number, Labels).
-
--spec measurement(ot_meter:bound_instrument() | ot_meter:name(), number())
-                 -> {ot_meter:bound_instrument() | ot_meter:name(), number()}.
-measurement(NameOrInstrument, Number) ->
-    {NameOrInstrument, Number}.
+-spec observe(ot_observer:instrument(), number(), ot_meter:labels()) -> ok.
+observe(ObserverInstrument, Number, LabelSet) ->
+    ot_meter:observe(ObserverInstrument, Number, LabelSet).

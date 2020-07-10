@@ -15,15 +15,15 @@
 %% @doc
 %% @end
 %%%-------------------------------------------------------------------------
--module(ot_counter).
+-module(ot_value_recorder).
 
 -behaviour(ot_instrument).
 
 -export([new/2,
          new/3,
-         add/2,
-         add/4,
          instrument_config/0,
+         record/2,
+         record/4,
          measurement/2]).
 
 -include("meter.hrl").
@@ -34,20 +34,20 @@ new(Meter, Name) ->
 
 -spec new(opentelemetry:meter(), ot_meter:name(), ot_meter:instrument_opts()) -> boolean().
 new(Meter, Name, Opts) ->
-    ot_meter:new_instrument(Meter, Name, ?KIND_COUNTER, Opts).
+    ot_meter:new_instrument(Meter, Name, ?KIND_VALUE_RECORDER, Opts).
 
 -spec instrument_config() -> ot_meter:instrument_config().
 instrument_config() ->
-    #{monotonic => true,
+    #{monotonic => false,
       synchronous => true}.
 
--spec add(ot_meter:bound_instrument(), number()) -> ok.
-add(BoundInstrument, Number) ->
+-spec record(ot_meter:bound_instrument(), number()) -> ok.
+record(BoundInstrument, Number) ->
     ot_meter:record(BoundInstrument, Number).
 
--spec add(opentelemetry:meter(), ot_meter:name(), number(), ot_meter:labels()) -> ok.
-add(Meter, Name, Number, Labels) ->
-    ot_meter:record(Meter, Name, Number, Labels).
+-spec record(opentelemetry:meter(), ot_meter:name(), number(), ot_meter:label_set()) -> ok.
+record(Meter, Name, Number, LabelSet) ->
+    ot_meter:record(Meter, Name, Number, LabelSet).
 
 -spec measurement(ot_meter:bound_instrument() | ot_meter:name(), number())
                  -> {ot_meter:bound_instrument() | ot_meter:name(), number()}.

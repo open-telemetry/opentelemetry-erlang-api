@@ -22,13 +22,7 @@ noop_metrics(_Config) ->
     Meter = opentelemetry:get_meter(),
     ?assertMatch({ot_meter_noop, _}, Meter),
 
-    ot_meter:new_instruments(Meter, [#{name => <<"noop-measure-1">>,
-                                       description => <<"some description">>,
-                                       kind => counter,
-                                       label_keys => [],
-                                       monotonic => true,
-                                       absolute => true,
-                                       unit => one}]),
+    ?assert(ot_counter:new(Meter, <<"noop-measure-1">>, #{description => <<"some description">>})),
 
     ok.
 
