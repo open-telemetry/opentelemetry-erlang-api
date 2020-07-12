@@ -37,6 +37,7 @@
 
 -export([new_instrument/4,
          new_instruments/2,
+         instrument_definition/4,
          bind/3,
          release/1,
          record/2,
@@ -53,22 +54,24 @@
 
 -type name() :: unicode:unicode_binary().
 -type description() :: unicode:unicode_binary().
--type instrument_kind() :: ?KIND_COUNTER | ?KIND_UPDOWN_COUNTER |
-                           ?KIND_VALUE_RECORDER | ?KIND_VALUE_OBSERVER |
-                           ?KIND_SUM_OBSERVER | ?KIND_UPDOWN_SUM_OBSERVER.
+-type instrument_kind() :: module().
 -type unit() :: atom().
 -type number_kind() :: integer | float.
 
 -type instrument_config() :: #{description => description(),
-                               number_kind  => number_kind(),
+                               number_kind => number_kind(),
                                unit        => unit(),
                                monotonic   := boolean(),
                                synchronous := boolean()}.
 
+-type instrument_properties() :: #{monotonic   := boolean(),
+                                   synchronous := boolean()}.
+
 -type instrument_opts() :: #{description => description(),
-                             number_kind  => number_kind(),
+                             number_kind => number_kind(),
                              unit        => unit()}.
 
+-type instrument_definition() :: {name(), instrument_kind(), instrument_opts()}.
 -type instrument() :: term().
 -type bound_instrument() :: {opentelemetry:meter(), term()}.
 
@@ -91,6 +94,12 @@ new_instrument(Meter={Module, _}, Name, InstrumentKind, InstrumentOpts) ->
 -spec new_instruments(opentelemetry:meter(), [{name(), instrument_kind(), instrument_opts()}]) -> boolean().
 new_instruments(Meter={Module, _}, List) ->
     Module:new_instruments(Meter, List).
+
+-spec instrument_definition(module(), name(), instrument_properties(), instrument_opts()) -> instrument_definition().
+instrument_definition(InstrumentModule, Name, Properties, Opts) ->
+    %% instrument config values are not allowed to be overridden so in case the user
+    %% attempts to pass as an optiion this merge will use the config value
+    {Name, InstrumentModule, maps:merge(Opts, Properties)}.
 
 -spec bind(opentelemetry:meter(), name(), labels()) -> bound_instrument().
 bind(Meter={Module, _}, Name, Labels) ->

@@ -21,12 +21,16 @@
 
 -export([new/2,
          new/3,
+         definition/1,
+         definition/2,
          add/2,
          add/4,
-         instrument_config/0,
          measurement/2]).
 
 -include("meter.hrl").
+
+-define(PROPERTIES, #{monotonic => true,
+                      synchronous => true}).
 
 -spec new(opentelemetry:meter(), ot_meter:name()) -> boolean().
 new(Meter, Name) ->
@@ -34,12 +38,15 @@ new(Meter, Name) ->
 
 -spec new(opentelemetry:meter(), ot_meter:name(), ot_meter:instrument_opts()) -> boolean().
 new(Meter, Name, Opts) ->
-    ot_meter:new_instrument(Meter, Name, ?KIND_COUNTER, Opts).
+    ot_meter:new_instrument(Meter, Name, ?MODULE, Opts).
 
--spec instrument_config() -> ot_meter:instrument_config().
-instrument_config() ->
-    #{monotonic => true,
-      synchronous => true}.
+-spec definition(ot_meter:name()) -> ot_meter:instrument_definition().
+definition(Name) ->
+    definition(Name, #{}).
+
+-spec definition(ot_meter:name(), ot_meter:instrument_opts()) -> ot_meter:instrument_definition().
+definition(Name, Opts) ->
+    ot_meter:instrument_definition(?MODULE, Name, ?PROPERTIES, Opts).
 
 -spec add(ot_meter:bound_instrument(), number()) -> ok.
 add(BoundInstrument, Number) ->

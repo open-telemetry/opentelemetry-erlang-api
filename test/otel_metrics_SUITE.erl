@@ -9,7 +9,7 @@
 -include("meter.hrl").
 
 all() ->
-    [noop_metrics, macros].
+    [noop_metrics, macros, non_overridable].
 
 init_per_suite(Config) ->
     application:load(opentelemetry_api),
@@ -34,4 +34,15 @@ macros(_Config) ->
                         monotonic => true,
                         absolute => true,
                         unit => one}]),
+    ok.
+
+%% checks that opts from the user can't override static attributes of an instrument
+non_overridable(_Config) ->
+    {_, _, Instrument} = ot_counter:definition(<<"noop-measure-1">>, #{description => <<"some description">>,
+                                                                       monotonic => false,
+                                                                       synchronous => false}),
+
+    ?assert(maps:get(monotonic, Instrument)),
+    ?assert(maps:get(synchronous, Instrument)),
+
     ok.

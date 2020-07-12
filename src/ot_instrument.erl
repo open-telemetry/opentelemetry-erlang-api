@@ -20,7 +20,8 @@
 -callback new(opentelemetry:meter(), ot_meter:name()) -> boolean().
 -callback new(opentelemetry:meter(), ot_meter:name(), ot_meter:instrument_opts()) -> boolean().
 
--callback instrument_config() -> ot_meter:instrument_config().
+-callback definition(ot_meter:name()) -> ot_meter:instrument_definition().
+-callback definition(ot_meter:name(), ot_meter:instrument_opts()) -> ot_meter:instrument_definition().
 
 -callback add(ot_meter:bound_instrument(), number()) -> ok.
 -callback add(opentelemetry:meter(), ot_meter:name(), number(), ot_meter:labels()) -> ok.
