@@ -20,6 +20,9 @@
 -callback new(opentelemetry:meter(), ot_meter:name()) -> boolean().
 -callback new(opentelemetry:meter(), ot_meter:name(), ot_meter:instrument_opts()) -> boolean().
 
+%% @doc returns an instrument definition which can be used to create a new instrument
+%% by passing to `ot_meter:new_instruments/1'
+%% @end
 -callback definition(ot_meter:name()) -> ot_meter:instrument_definition().
 -callback definition(ot_meter:name(), ot_meter:instrument_opts()) -> ot_meter:instrument_definition().
 

@@ -27,13 +27,13 @@ noop_metrics(_Config) ->
     ok.
 
 macros(_Config) ->
-    ?new_instruments([#{name => <<"macros-measure-1">>,
-                        description => <<"some description">>,
-                        kind => counter,
-                        label_keys => [],
-                        monotonic => true,
-                        absolute => true,
-                        unit => one}]),
+    ?ot_new_instruments([#{name => <<"macros-measure-1">>,
+                           description => <<"some description">>,
+                           kind => counter,
+                           label_keys => [],
+                           monotonic => true,
+                           absolute => true,
+                           unit => one}]),
     ok.
 
 %% checks that opts from the user can't override static attributes of an instrument

@@ -91,7 +91,7 @@
 new_instrument(Meter={Module, _}, Name, InstrumentKind, InstrumentOpts) ->
     Module:new_instrument(Meter, Name, InstrumentKind, InstrumentOpts).
 
--spec new_instruments(opentelemetry:meter(), [{name(), instrument_kind(), instrument_opts()}]) -> boolean().
+-spec new_instruments(opentelemetry:meter(), [instrument_definition()]) -> boolean().
 new_instruments(Meter={Module, _}, List) ->
     Module:new_instruments(Meter, List).
 
