@@ -3,7 +3,7 @@ defmodule OpenTelemetry.UpdownSumObserver do
 
       require OpenTelemetry.UpdownSumObserver
 
-      OpenTelemetry.UpdownSumObserver.set_callback("some.counter", fn o -> OpenTelemetry.UpdownSumObserver.observe(o, -33, []))
+      OpenTelemetry.UpdownSumObserver.set_callback("some.counter", OpenTelemetry.UpdownSumObserver.observe(&1, -33, []))
   """
 
   defmacro new(name, opts \\ %{}) do
