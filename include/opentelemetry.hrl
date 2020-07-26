@@ -73,7 +73,7 @@
 
 -define(OTEL_STATUS_OK, 'Ok').
 -define(OTEL_STATUS_CANCELLED, 'Cancelled').
--define(OTEL_STATUS_UNKNOWN, 'UnknownError').
+-define(OTEL_STATUS_UNKNOWN, 'Unknown').
 -define(OTEL_STATUS_INVALID_ARGUMENT, 'InvalidArgument').
 -define(OTEL_STATUS_DEADLINE_EXCEEDED, 'DeadlineExceeded').
 -define(OTEL_STATUS_NOT_FOUND, 'NotFound').
