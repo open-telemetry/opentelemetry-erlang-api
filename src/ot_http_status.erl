@@ -102,5 +102,5 @@ status_message(#status{code = Code, message = <<"">>} = Status) ->
                 <<"Unauthorized">>
         end,
     Status#status{message = Message};
-status_message(Message) when is_binary(Message) ->
-    Message.
+status_message(Status) ->
+    Status.
