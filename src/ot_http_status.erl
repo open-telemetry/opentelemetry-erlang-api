@@ -13,7 +13,8 @@
 %% limitations under the License.
 %%
 %% @doc
-%% Span behaviour.
+%% HTTP Status helper module. Provides functions to working with HTTP status
+%% codes to status records.
 %% @end
 %%%-------------------------------------------------------------------------
 -module(ot_http_status).
