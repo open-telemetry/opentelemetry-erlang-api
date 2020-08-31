@@ -77,6 +77,6 @@ span_module(_) ->
 end_span(_) ->
     true.
 
--spec end_span(opentelemetry:tracer(), ot_tracer:span_ctx()) -> boolean() | {error, term()}.
+-spec end_span(opentelemetry:tracer(), opentelemetry:span_ctx()) -> boolean() | {error, term()}.
 end_span(_, _) ->
     true.

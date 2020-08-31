@@ -66,6 +66,7 @@
 -type measurement() :: {bound_instrument() | name(), number()}.
 
 -export_type([key/0,
+              bound_instrument/0,
               name/0,
               description/0,
               instrument_kind/0,

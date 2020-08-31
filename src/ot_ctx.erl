@@ -50,7 +50,9 @@
 
 -export_type([ctx/0,
               key/0,
-              value/0]).
+              value/0,
+              namespace/0
+            ]).
 
 -spec set_value(term(), term(), term()) -> ok.
 set_value(Namespace, Key, Value) ->

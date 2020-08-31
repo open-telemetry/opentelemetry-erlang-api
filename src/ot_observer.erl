@@ -28,8 +28,9 @@
 
 %% value containing all information needed by the SDK to record an update
 -type observer_instrument() :: term().
+-type observer_result() :: {module(), observer_instrument()}.
 
--export_type([callback/0]).
+-export_type([callback/0, observer_result/0]).
 
 -spec set_callback(opentelemetry:meter(), ot_meter:name(), callback()) -> ok.
 set_callback(Meter, Observer, Callback) ->
