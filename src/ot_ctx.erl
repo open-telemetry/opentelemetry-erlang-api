@@ -17,9 +17,12 @@
 %%%-------------------------------------------------------------------------
 -module(ot_ctx).
 
--export([set_value/2,
+-export([new/0,
+         set_value/2,
+         set_value/3,
          get_value/1,
          get_value/2,
+         get_value/3,
          remove/1,
          clear/0,
 
@@ -47,31 +50,35 @@
 
 -define(CURRENT_CTX, '$__current_otel_ctx').
 
+-spec new() -> ctx().
+new() ->
+    #{}.
+
 -spec set_value(term(), term()) -> ok.
 set_value(Key, Value) ->
-    case erlang:get(?CURRENT_CTX) of
-        Map when is_map(Map) ->
-            erlang:put(?CURRENT_CTX, Map#{Key => Value}),
-            ok;
-        _ ->
-            erlang:put(?CURRENT_CTX, #{Key => Value}),
-            ok
-    end.
+    erlang:put(?CURRENT_CTX, set_value(erlang:get(?CURRENT_CTX), Key, Value)).
+
+-spec set_value(ctx(), term(), term()) -> map().
+set_value(Ctx, Key, Value) when is_map(Ctx) ->
+    Ctx#{Key => Value};
+set_value(_, Key, Value) ->
+    #{Key => Value}.
 
 -spec get_value(term()) -> term().
 get_value(Key) ->
-    get_value(Key, undefined).
+    get_value(erlang:get(?CURRENT_CTX), Key, undefined).
 
 -spec get_value(term(), term()) -> term().
 get_value(Key, Default) ->
-    case erlang:get(?CURRENT_CTX) of
-        undefined ->
-            Default;
-        Map when is_map(Map) ->
-            maps:get(Key, Map, Default);
-        _ ->
-            Default
-    end.
+    get_value(erlang:get(?CURRENT_CTX), Key, Default).
+
+-spec get_value(ctx(), term(), term()) -> term().
+get_value(undefined, _Key, Default) ->
+    Default;
+get_value(Ctx, Key, Default) when is_map(Ctx) ->
+    maps:get(Key, Ctx, Default);
+get_value(_, _, Default) ->
+    Default.
 
 -spec clear() -> ok.
 clear() ->
@@ -112,7 +119,7 @@ http_extractor(FromText) ->
 
 http_extractor_fun(Headers, FromText) ->
     New = FromText(Headers, ?MODULE:get_current()),
-    ?MODULE:set_current(New).
+    ?MODULE:attach(New).
 
 http_extractor(Key, FromText) ->
     {fun ?MODULE:http_extractor_fun/3, {Key, FromText}}.

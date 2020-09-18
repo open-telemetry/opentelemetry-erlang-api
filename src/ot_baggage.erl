@@ -53,7 +53,7 @@ get_http_propagators() ->
                                               [$,, [Key, "=", Value] | Acc]
                                end, [], Baggage) of
                          [$, | List] ->
-                             [{?BAGGAGE_HEADER, List}];
+                             [{?BAGGAGE_HEADER, unicode:characters_to_list(List)}];
                          _ ->
                              []
                      end
@@ -63,7 +63,7 @@ get_http_propagators() ->
                            undefined ->
                                CurrentBaggage;
                            String ->
-                               Pairs = string:lexemes(String, [","]),
+                               Pairs = string:lexemes(String, [$,]),
                                lists:foldl(fun(Pair, Acc) ->
                                                    [Key, Value] = string:split(Pair, "="),
                                                    Acc#{unicode:characters_to_list(Key) =>
