@@ -39,18 +39,18 @@
          http_injector_fun/2,
          http_injector_fun/3]).
 
--type ctx() :: map().
+-type t() :: map().
 -type key() :: term().
 -type value() :: term().
 -type token() :: reference().
 
--export_type([ctx/0,
+-export_type([t/0,
               key/0,
               value/0]).
 
 -define(CURRENT_CTX, '$__current_otel_ctx').
 
--spec new() -> ctx().
+-spec new() -> t().
 new() ->
     #{}.
 
@@ -58,7 +58,7 @@ new() ->
 set_value(Key, Value) ->
     erlang:put(?CURRENT_CTX, set_value(erlang:get(?CURRENT_CTX), Key, Value)).
 
--spec set_value(ctx(), term(), term()) -> map().
+-spec set_value(t(), term(), term()) -> map().
 set_value(Ctx, Key, Value) when is_map(Ctx) ->
     Ctx#{Key => Value};
 set_value(_, Key, Value) ->
@@ -72,7 +72,7 @@ get_value(Key) ->
 get_value(Key, Default) ->
     get_value(erlang:get(?CURRENT_CTX), Key, Default).
 
--spec get_value(ctx(), term(), term()) -> term().
+-spec get_value(t(), term(), term()) -> term().
 get_value(undefined, _Key, Default) ->
     Default;
 get_value(Ctx, Key, Default) when is_map(Ctx) ->
